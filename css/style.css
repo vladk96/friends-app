@@ -105,11 +105,13 @@ body {
     font-size: 1.28em;
     color: rgba(0,0,0,.85);
     text-decoration: none;
+    text-transform: capitalize;
     transition: color .2s linear;
 }
 .card .name:hover { color: #85b7d9; }
 
 .card .age,
+.card .gender,
 .card .tel,
 .card .city {
     font-size: .9rem;
@@ -117,7 +119,7 @@ body {
     font-weight: 400;
 }
 
-.card .age { color: rgba(0,0,0,.4);
-}
+.card .age,
+.card .gender { color: rgba(0,0,0,.4);}
 
 .card .tel { margin-top: 10px; }

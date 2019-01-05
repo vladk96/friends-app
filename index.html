@@ -12,42 +12,28 @@
 <body>
     <header class="header">
         <a href="index.html" class="logo">Friends app</a>
-        <form class="form">
-            <input type="text" name="search" class="search" placeholder="Search">
+        <form class="form" name="form-sort">
+            <input id="search" class="search" type="text" name="search"  placeholder="Search">
             <label>Sort:</label>
-            <select name="sort-gender">
+            <select id="sort-gender">
                 <option value="all">all</option>
                 <option value="male">male</option>
                 <option value="female">female</option>
             </select>
-            <select name="sort-name">
+            <select id="sort-name">
                 <option hidden disabled selected>by name</option>
-                <option value="all">A-Z</option>
-                <option value="male">Z-A</option>
+                <option value="increase">A-Z</option>
+                <option value="descrease">Z-A</option>
             </select>
-            <select name="sort-age">
+            <select id="sort-age">
                 <option hidden disabled selected>by age</option>
-                <option value="all">0-9</option>
-                <option value="male">9-0</option>
+                <option value="increase">0-9</option>
+                <option value="descrease">9-0</option>
             </select>
-            <button class="reset">Reset</button>
+            <button class="button">Reset</button>
         </form>
     </header>
-    <main class="main">
-        <div class="card-container">
-            <div class="card">
-                <div class="image">
-                    <img src="21.jpg" alt="">
-                </div>
-                <div class="content">
-                    <a href="#" class="name">Bill Armstrong</a>
-                    <p class="age">Age: 44</p>
-                    <p class="tel">Tel: 121545451</p>
-                    <p class="city">City: New-York</p>
-                </div>
-            </div>                                  
-        </div>
-    </main>
+    <main class="main"></main>
     <script src="js/app.js"></script>
 </body>
 </html>
