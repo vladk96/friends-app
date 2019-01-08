@@ -1,3 +1,4 @@
+
 fetch('https://randomuser.me/api/?results=30&inc=name,dob,gender,location,phone,picture')
     .then(res => {
         return res.json();
@@ -32,12 +33,13 @@ const createCards = (prof) => {
 
 const searchName = (e, users) => {
     let word = e.target.value;
-    console.log();
 
     const matchArr = users.filter( (user) => {
         const regex = new RegExp(word, 'gi');
         return user.name.first.match(regex) || user.name.last.match(regex);
     });
+
+    usersArray = matchArr;
     document.querySelector('.main').innerHTML = '';
     createCards(matchArr);
 }
@@ -89,20 +91,23 @@ const reset = () => {
     document.querySelector('.form').reset();
 }
 
+let usersArray = [];
+
 const render = (users) => {
     createCards(users);
+    usersArray = users.slice();
 
     document.getElementById('search').addEventListener('keyup', (e) => {
-        searchName(e, users)
+        searchName(e, users);
     });
     document.getElementById('sort-gender').addEventListener('change', (e) => {
-        filterGender(e, users);
+        filterGender(e, usersArray);
     });
     document.getElementById('sort-age').addEventListener('change', (e) => {
-        sortAge(e, users);
+        sortAge(e, usersArray);
     });
     document.getElementById('sort-name').addEventListener('change', (e) => {
-        sortName(e, users);
+        sortName(e, usersArray);
     });
     document.querySelector('.reset').addEventListener('click', reset);
 }
