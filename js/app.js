@@ -1,11 +1,18 @@
+const URL = 'https://randomuser.me/api/?results=30&inc=name,dob,gender,location,phone,picture';
+let usersArray = [];
 
-fetch('https://randomuser.me/api/?results=30&inc=name,dob,gender,location,phone,picture')
-    .then(res => {
-        return res.json();
-    })
-    .then(users => {
-        render(users.results);
-    });
+const handleErrors = (response) => {
+    if (!response.ok) {
+        throw Error(response.statusText);
+    }
+    return response;
+}
+
+fetch(URL)
+    .then(handleErrors)
+    .then(res => res.json())
+    .then(users => render(users.results))
+    .catch(error => console.log(error));
 
 const createCards = (prof) => {
     let cardContainer = document.createElement('div');
@@ -32,16 +39,15 @@ const createCards = (prof) => {
 }
 
 const searchName = (e, users) => {
-    let word = e.target.value;
+    const word = e.target.value.toLowerCase();
 
-    const matchArr = users.filter( (user) => {
-        const regex = new RegExp(word, 'gi');
-        return user.name.first.match(regex) || user.name.last.match(regex);
+    usersArray = users.filter( (user) => {
+        const fullName = user.name.first + ' ' + user.name.last;
+        return fullName.includes(word);
     });
 
-    usersArray = matchArr;
     document.querySelector('.main').innerHTML = '';
-    createCards(matchArr);
+    createCards(usersArray);
 }
 
 const filterGender = (e, users) => {
@@ -51,9 +57,7 @@ const filterGender = (e, users) => {
     if (gender === 'all') {
         createCards(users);
     } else {
-        createCards(users.filter( (user) => {
-            return user.gender === gender;
-        }));
+        createCards(users.filter( (user) => user.gender === gender));
     }
 }
 
@@ -62,13 +66,9 @@ const sortAge = (e, users) => {
     document.querySelector('.main').innerHTML = '';
     let arrayUsers = users.slice();
     if (value === 'increase') {
-        createCards(arrayUsers.sort( (a, b) => {
-            return a.dob.age - b.dob.age;
-        }));
+        createCards(arrayUsers.sort( (a, b) => a.dob.age - b.dob.age));
     } else if (value === 'descrease') {
-        createCards(arrayUsers.sort( (a, b) => {
-            return b.dob.age - a.dob.age;
-        }));
+        createCards(arrayUsers.sort( (a, b) => b.dob.age - a.dob.age));
     }
 }
 
@@ -77,21 +77,15 @@ const sortName = (e, users) => {
     document.querySelector('.main').innerHTML = '';
     let arrayUsers = users.slice();
     if (value === 'increase') {
-        createCards(arrayUsers.sort( (a, b) => {
-            return (a.name.first < b.name.first) ?  -1 : 1 ;
-        }));
+        createCards(arrayUsers.sort( (a, b) => (a.name.first < b.name.first) ?  -1 : 1 ));
     } else if (value === 'descrease') {
-        createCards(arrayUsers.sort( (a, b) => {
-            return (a.name.first > b.name.first) ?  -1 : 1 ;
-        }));
+        createCards(arrayUsers.sort( (a, b) => (a.name.first > b.name.first) ?  -1 : 1 ));
     }
 }
 
 const reset = () => {
     document.querySelector('.form').reset();
 }
-
-let usersArray = [];
 
 const render = (users) => {
     createCards(users);
