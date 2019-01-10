@@ -1,5 +1,6 @@
 const URL = 'https://randomuser.me/api/?results=30&inc=name,dob,gender,location,phone,picture';
-let usersArray = [];
+let usersArray = [],
+    sortedArray = [];
 
 const handleErrors = (response) => {
     if (!response.ok) {
@@ -55,31 +56,33 @@ const filterGender = (e, users) => {
     document.querySelector('.main').innerHTML = '';
 
     if (gender === 'all') {
+        sortedArray = users;
         createCards(users);
     } else {
-        createCards(users.filter( (user) => user.gender === gender));
+        sortedArray = users.filter( (user) => user.gender === gender);
+        createCards(sortedArray);
     }
 }
 
 const sortAge = (e, users) => {
     const value = e.target.value;
     document.querySelector('.main').innerHTML = '';
-    let arrayUsers = users.slice();
+
     if (value === 'increase') {
-        createCards(arrayUsers.sort( (a, b) => a.dob.age - b.dob.age));
+        createCards(users.sort( (a, b) => a.dob.age - b.dob.age));
     } else if (value === 'descrease') {
-        createCards(arrayUsers.sort( (a, b) => b.dob.age - a.dob.age));
+        createCards(users.sort( (a, b) => b.dob.age - a.dob.age));
     }
 }
 
 const sortName = (e, users) => {
     const value = e.target.value;
     document.querySelector('.main').innerHTML = '';
-    let arrayUsers = users.slice();
+
     if (value === 'increase') {
-        createCards(arrayUsers.sort( (a, b) => (a.name.first < b.name.first) ?  -1 : 1 ));
+        createCards(users.sort( (a, b) => (a.name.first < b.name.first) ?  -1 : 1 ));
     } else if (value === 'descrease') {
-        createCards(arrayUsers.sort( (a, b) => (a.name.first > b.name.first) ?  -1 : 1 ));
+        createCards(users.sort( (a, b) => (a.name.first > b.name.first) ?  -1 : 1 ));
     }
 }
 
@@ -87,21 +90,38 @@ const reset = () => {
     document.querySelector('.form').reset();
 }
 
+const resetSelectValues = (gender, name, age) => {
+    if (gender) {
+        document.getElementById('sort-gender').value = 'all';
+    }
+    if (name) {
+        document.getElementById('sort-name').value = 'by name';
+    }
+    if (age) {
+        document.getElementById('sort-age').value = 'by age';
+    }
+}
+
 const render = (users) => {
     createCards(users);
     usersArray = users.slice();
+    sortedArray = users.slice();
 
     document.getElementById('search').addEventListener('keyup', (e) => {
         searchName(e, users);
+        resetSelectValues(true, true, true);
     });
     document.getElementById('sort-gender').addEventListener('change', (e) => {
         filterGender(e, usersArray);
+        resetSelectValues(false, true, true);
     });
     document.getElementById('sort-age').addEventListener('change', (e) => {
-        sortAge(e, usersArray);
+        sortAge(e, sortedArray);
+        resetSelectValues(false, true, false);
     });
     document.getElementById('sort-name').addEventListener('change', (e) => {
-        sortName(e, usersArray);
+        sortName(e, sortedArray);
+        resetSelectValues(false, false, true);
     });
     document.querySelector('.reset').addEventListener('click', reset);
 }
