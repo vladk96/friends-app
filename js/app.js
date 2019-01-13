@@ -99,7 +99,7 @@ const render = (users) => {
     usersArray = users.slice();
     sortedArray = users.slice();
 
-    document.getElementById('search').addEventListener('keyup', (e) => {
+    document.getElementById('search').addEventListener('input', (e) => {
         searchName(e, users);
         filterGender(usersArray);
         sortAge(sortedArray);
